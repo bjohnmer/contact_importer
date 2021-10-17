@@ -1,0 +1,12 @@
+<p>Upload a CSV file and set the columns per each the database field</p>
+
+<%= form_tag imported_files_import_path, multipart: true do %>
+  <%= file_field_tag "csv_file", required: true %>
+  <br/><br/>
+    <% @columns.each_with_index do |col,index| %>
+      <%= select_tag("col_#{index}", options_for_select(@columns)) %> <%= text_field_tag "input_#{index}", nil ,required: true %><br>
+    <% end %>
+  <br>
+
+  <%= submit_tag "Upload" %>
+<% end %>
