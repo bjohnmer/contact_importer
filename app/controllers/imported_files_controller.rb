@@ -11,12 +11,8 @@ class ImportedFilesController < ApplicationController
 
   def import
     if params['csv_file'].present?
-      result = CsvClientsImporter.csv_import!(current_user, params['csv_file'], import_params)
-
-      notice = result[:errors].present? ? result[:errors] : 'CSV impoted successfully'
-      imported_file = current_user.imported_files.create(file_name: params['csv_file'].original_filename, status: result[:status], file: params['csv_file'])
-      imported_file.import_summaries.create(stats: result[:stats], messages: result[:errors] )
-
+      create_imported_file
+      notice = 'CSV file is being processed'
       path = imported_files_index_path
     else
       path = imported_files_upload_path
@@ -46,6 +42,16 @@ class ImportedFilesController < ApplicationController
     end
 
     form_fields
+  end
+
+  def create_imported_file
+    imported_file = current_user.imported_files.create(
+      file_name: params['csv_file'].original_filename,
+      status: :on_hold,
+      file: params['csv_file']
+    )
+
+    CsvGeneratorJob.perform_later(imported_file.id, import_params)
   end
 
   def valid_columns

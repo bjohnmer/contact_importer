@@ -33,6 +33,7 @@ gem "aws-sdk-s3", require: false
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+gem 'sidekiq', '~> 6.2', '>= 6.2.2'
 group :test do
   gem 'simplecov', require: false
   gem 'shoulda-matchers', '~> 4.1'
@@ -45,7 +46,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.0', '>= 5.0.2'
   gem 'factory_bot_rails', '~> 5.0', '>= 5.0.1'
   gem 'faker', '~> 2.19'
-  gem 'dotenv', '~> 2.7', '>= 2.7.6'
+  gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
 end
 
 group :development do

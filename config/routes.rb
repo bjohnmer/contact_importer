@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  default_url_options :host => ENV['RAILS_DEFAULT_URL']
+
   resources :contacts, only: [:index]
   namespace :imported_files do
    get 'index'
