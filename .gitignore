@@ -8,7 +8,9 @@
 /.bundle
 
 .env
+dump.rdb
 
+/coverage/
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

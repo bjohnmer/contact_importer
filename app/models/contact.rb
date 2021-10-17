@@ -28,7 +28,9 @@ class Contact < ApplicationRecord
   end
 
   def set_franchise
-    cleaned_number = credit_card.delete('^0-9')
-    self.franchise = cleaned_number.credit_card_bin_brand
+    cleaned_number = credit_card&.delete('^0-9')
+    self.franchise = cleaned_number&.credit_card_bin_brand
+  rescue
+    self.franchise = ''
   end
 end
