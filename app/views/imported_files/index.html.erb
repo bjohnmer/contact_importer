@@ -1,21 +1,35 @@
-<h1>Imported Files</h1>
 <%= render partial: 'partials/menu' %>
-<table>
-  <thead>
-    <th>Action</th>
-    <th>File Name</th>
-    <th>Status</th>
-    <th>Created at</th>
-  </thead>
-  <tbody>
-    <% @imported_files.each do |imp| %>
+<div class="row">
+  <h1>Imported Files</h1>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= link_to "View", imported_files_show_path(imp) %></td>
-        <td><%= link_to imp.file_name, url_for(imp.file) %></td>
-        <td><%= imp.status %></td>
-        <td><%= imp.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        <th>Action</th>
+        <th>File Name</th>
+        <th>Status</th>
+        <th>Created at</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-<%= paginate @imported_files, left: 2, right: 2 %>
+    </thead>
+    <tbody>
+      <% @imported_files.each do |imp| %>
+        <tr>
+          <td>
+            <% if imp.import_summaries.any? %>
+              <%= link_to "View", imported_files_show_path(imp) %>
+            <% else %>
+              View
+            <% end %>
+            
+          </td>
+          <td><%= link_to imp.file_name, url_for(imp.file) %></td>
+          <td><%= imp.status %></td>
+          <td><%= imp.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center">
+    <%= render 'partials/paginate', object: @imported_files, left: 2, right: 2 %>
+  </div>
+</div>

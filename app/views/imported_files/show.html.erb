@@ -1,9 +1,9 @@
-<div>
+<%= render partial: 'partials/menu' %>
+<div class="row">
   <h1><%= @summary.imported_file.file_name %></h1>
   <h3>Estatus: <%= @summary.imported_file.status %></h3>
   <strong>Stats: <%= @summary.stats %></strong>
   <br>
   <strong>Error: <%= @summary.messages %></strong>
   <br>
-  <%= link_to "Back" , imported_files_index_path %>
 </div>

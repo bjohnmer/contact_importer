@@ -1,29 +1,36 @@
-<h1>Contacts</h1>
 <%= render partial: 'partials/menu' %>
-<%= link_to "Import Contacts" , imported_files_upload_path %>
-<table>
-  <thead>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Phone</th>
-    <th>Credit Card</th>
-    <th>Franchise</th>
-    <th>Day of birth </th>
-    <th>Address</th>
-  </thead>
-  <tbody>
-    <% @contacts.each do |c| %>
+<div class="row">
+  <h1 class="center">Contacts</h1>
+  <%= link_to "Import Contacts" , imported_files_upload_path %>
+
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= c.name %></td>
-        <td><%= c.email %></td>
-        <td><%= c.phone %></td>
-        <td><%= c.credit_card %></td>
-        <td><%= c.franchise %></td>
-        <td><%= c.dob %></td>
-        <td><%= c.address %></td>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Credit Card</th>
+        <th>Franchise</th>
+        <th>Day of birth </th>
+        <th>Address</th>
       </tr>
-    <% end %>
-    
-  </tbody>
-</table>
-<%= paginate @contacts, left: 2, right: 2 %>
+    </thead>
+    <tbody>
+      <% @contacts.each do |c| %>
+        <tr>
+          <td><%= c.name %></td>
+          <td><%= c.email %></td>
+          <td><%= c.phone %></td>
+          <td><%= c.credit_card %></td>
+          <td><%= c.franchise %></td>
+          <td><%= c.dob %></td>
+          <td><%= c.address %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center">
+    <%= render 'partials/paginate', object: @contacts, left: 2, right: 2 %>
+  </div>
+</div>

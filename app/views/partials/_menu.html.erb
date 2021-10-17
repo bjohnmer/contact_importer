@@ -1,6 +1,16 @@
-<ul>
-  <li><%= link_to "Home" , root_path %></li>
-  <li><%= link_to "Contacts" , contacts_path %></li>
-  <li><%= link_to "Imported Files" , imported_files_index_path %></li>
-  <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
-</ul>
+<div class="d-flex justify-content-center">
+  <ul class="nav">
+    <li class="nav-item">
+      <%= link_to "Home" , root_path, class: "nav-link active" %>
+    </li>
+    <li>
+      <%= link_to "Contacts" , contacts_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to "Imported Files" , imported_files_index_path, class: "nav-link" %>
+    </li>
+    <li class="nav-item">
+      <%= link_to 'Logout', destroy_user_session_path, class: "nav-link" %>
+    </li>
+  </ul>
+</div>
