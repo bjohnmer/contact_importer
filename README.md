@@ -37,6 +37,16 @@ Terminal #3
 $ bundle exec rails s
 ```
 
+To run test...
+```sh
+$ bundle exec rspec
+```
+
+To check coverage
+```sh
+$ open coverage/index.html
+```
+
 ### Usage
  * Browse to http://localhost:3000
  * Login or Signup(http://localhost:3000/auth/sign_up)
