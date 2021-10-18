@@ -48,6 +48,17 @@ RSpec.describe CsvClientsImporter do
       expect(result[:errors]).to include('can\'t be blank')
     end
 
+    it 'imports contacts from XLSX file when some errors occur' do
+      pdf = fixture_file_upload(Rails.root + 'spec/fixtures/contacts_xlsx.xlsx','application/vnd.ms-excel')
+
+      result = CsvClientsImporter::csv_import!(user, pdf, valid_columns)
+ 
+      expect(result.include?(:stats)).to be true
+      expect(result.include?(:errors)).to be true
+      expect(result[:errors]).to include('invalid')
+      expect(result[:errors]).to include('can\'t be blank')
+    end
+
     it 'imports contacts when CSV is all valid' do
       valid_file = fixture_file_upload(Rails.root + 'spec/fixtures/contacts_all_valid_data.csv','text/csv')
 
