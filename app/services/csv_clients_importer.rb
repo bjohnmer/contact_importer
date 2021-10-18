@@ -18,14 +18,16 @@ class CsvClientsImporter
   class << self
     def csv_import!(user, file, column_data)
       @errors = { errors: [] }
+      @stats = init_stats
+
+      file_type = file.content_type
+      return { stats: @stats, status: :failed, errors: @errors[:errors].join(', ') } unless right_file_type?(file_type)
 
       @emails_in_csv = {}.with_indifferent_access
 
       @cleaned_fields = column_data_prepare(column_data)
 
-      @stats = init_stats
-
-      rows = parse_file!(file)
+      rows = parse_file!(file,file_type)
 
       @contacts_by_email = contacts_by_email(rows)
 
@@ -41,11 +43,12 @@ class CsvClientsImporter
       Contact.transaction do
         errors = []
         contacts = contact_rows(user, rows)
-        contacts.each_with_index do |c, index|
-          next if c.save
+
+        contacts.each_with_index do |contact, index|
+          next if contact.save
 
           row_number = index + 2
-          errors << error_message(row_number, c.errors.full_messages.join(', '))
+          errors << error_message(row_number, contact.errors.full_messages.join(', '))
         end
 
         status = errors.length == contacts.length ? :failed : :finished
@@ -56,22 +59,14 @@ class CsvClientsImporter
     end
 
     def contact_rows(user, rows)
+      new_contact = []
       rows.map do |row|
-        next unless row.present?
-
-        build_contact(user, row)
-      end
-    end
-
-    def build_errors(results, contacts)
-      messages = []
-      results.failed_instances.each do |record|
-        position = contacts.find_index { |e| e == record }
-        row_number = position + 2
-        messages << error_message(row_number, record.errors.full_messages.join(', '))
+        if row.present?
+          new_contact << build_contact(user, row)
+        end
       end
 
-      messages.join(',')
+      new_contact
     end
 
     def column_data_prepare(column_data)
@@ -94,8 +89,8 @@ class CsvClientsImporter
       }
     end
 
-    def parse_file!(file)
-      file_data = parsed_file(file)
+    def parse_file!(file, file_type)
+      file_data = parsed_file(file,file_type)
       return [] if file_data.blank?
 
       file_data.map.with_index do |row, index|
@@ -110,10 +105,7 @@ class CsvClientsImporter
       end
     end
 
-    def parsed_file(file)
-      file_type = file.content_type
-      return unless right_file_type?(file_type)
-
+    def parsed_file(file, file_type)
       data = if [
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'application/vnd.ms-excel'
@@ -123,7 +115,7 @@ class CsvClientsImporter
              else
                file.read
              end
-      data.gsub!(';', ',')
+      # data.gsub!(';', ',')
 
       file_data(data)
     end
@@ -199,10 +191,6 @@ class CsvClientsImporter
 
     def error_message(row_number, message)
       "Row #{row_number} invalid: #{message}"
-    end
-
-    def error_response(messages)
-      { errors: messages }
     end
 
     def build_contact(user, row)
