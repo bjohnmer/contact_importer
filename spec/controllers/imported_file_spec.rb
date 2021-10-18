@@ -1,16 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ImportedFilesController, type: :controller do
-  def permitted_params
-    form_fields = []
-    valid_columns.each_with_index do |col, index|
-      form_fields.push("col_#{index}")
-      form_fields.push("input_#{index}")
-    end
-
-    form_fields
-  end
-
   def valid_columns
     Contact.column_names.reject { |column| %w[id franchise created_at updated_at user_id].include?(column) }
   end
